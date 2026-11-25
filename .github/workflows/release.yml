@@ -26,15 +26,15 @@ jobs:
       - name: Check versions agree
         id: version
         run: |
-          header=$(sed -n 's/^ \* Version:[[:space:]]*//p' wp-nopnoe.php | head -1 | tr -d '\r')
+          header=$(sed -n 's/^ \* Version:[[:space:]]*//p' nopnoe.php | head -1 | tr -d '\r')
           stable=$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')
 
           if [ -z "$header" ] || [ -z "$stable" ]; then
-            echo "Could not read the version from wp-nopnoe.php or readme.txt." >&2
+            echo "Could not read the version from nopnoe.php or readme.txt." >&2
             exit 1
           fi
           if [ "$header" != "$stable" ]; then
-            echo "Version mismatch: wp-nopnoe.php says $header, readme.txt says $stable." >&2
+            echo "Version mismatch: nopnoe.php says $header, readme.txt says $stable." >&2
             exit 1
           fi
           if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "$header" != "${GITHUB_REF_NAME}" ]; then
@@ -52,8 +52,8 @@ jobs:
       - name: Upload the zip
         uses: actions/upload-artifact@v4
         with:
-          name: wp-nopnoe-${{ steps.version.outputs.version }}
-          path: dist/wp-nopnoe.zip
+          name: nopnoe-${{ steps.version.outputs.version }}
+          path: dist/nopnoe.zip
           if-no-files-found: error
 
       - name: Create the GitHub release
@@ -61,7 +61,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ github.ref_name }}" dist/wp-nopnoe.zip \
+          gh release create "${{ github.ref_name }}" dist/nopnoe.zip \
             --title "${{ github.ref_name }}" \
             --generate-notes
 
@@ -83,6 +83,6 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: wp-nopnoe
+          SLUG: nopnoe
         with:
           dry-run: ${{ inputs.dry_run == true }}

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Builds dist/wp-nopnoe.zip, the folder wordpress.org expects for the wp-nopnoe slug.
+# Builds dist/nopnoe.zip, the folder wordpress.org expects for the nopnoe slug.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
