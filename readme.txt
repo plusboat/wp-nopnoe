@@ -1,4 +1,4 @@
-=== No Panel No Edit ===
+=== WP No panel - No edit ===
 Contributors: plusboat
 Tags: admin bar, admin toolbar, edit links, toolbar, hide admin bar
 Requires at least: 6.0
@@ -29,7 +29,7 @@ repeat the whole exercise after the next theme update. That is what this plugin 
 
 = How it decides =
 
-No Panel No Edit does not have its own preference. It reads the one WordPress already has:
+WP No panel - No edit does not have its own preference. It reads the one WordPress already has:
 if `is_admin_bar_showing()` is false for the current front end request, the edit links are
 hidden too. That means the plugin follows the user's profile setting, and it also respects
 another plugin that hides the toolbar with the `show_admin_bar` filter.

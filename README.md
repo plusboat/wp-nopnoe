@@ -1,9 +1,9 @@
-# No Panel No Edit
+# WP No panel - No edit (nopnoe)
 
 A two-hook WordPress plugin: when a user hides the admin toolbar, stop showing them edit
 links on the front end. No panel, no edit.
 
-* **Plugin slug:** `nopnoe`
+* **Plugin slug:** `wp-nopnoe`
 * **Requires:** WordPress 6.0+, PHP 7.4+
 * **User documentation:** [readme.txt](readme.txt)
 * **License:** GPL-2.0-or-later
@@ -79,7 +79,7 @@ Useful flags: `--reset` (start from a clean site), `--wp=<version>`, `--php=<ver
 composer lint                                     # PHPCS, WordPress Coding Standards
 npx @wp-playground/cli@latest run-blueprint \
   --blueprint=tests/smoke-blueprint.json \
-  --mount="$PWD:/wordpress/wp-content/plugins/nopnoe"
+  --mount="$PWD:/wordpress/wp-content/plugins/wp-nopnoe"
 ```
 
 The blueprint boots a real WordPress, activates the plugin and runs
@@ -94,22 +94,62 @@ run it before submitting.
 
 ## Release
 
-The plugin folder inside the zip must be named `nopnoe`, after the wordpress.org slug:
+### The first release cannot be automated
+
+WordPress.org has no API for the initial submission. You upload the zip at
+[wordpress.org/plugins/developers/add/](https://wordpress.org/plugins/developers/add/) and a
+human volunteer reviews it; only after approval does the SVN repository, and with it any
+chance of automation, exist. Nothing in a workflow file can skip that queue.
+
+The slug in particular is assigned during review. The directory derives it from the plugin
+name (the FAQ example: `Boaty McBoatface` → `boaty-mcboatface`), which for "WP No panel - No
+edit" would produce `wp-no-panel-no-edit`. So the submission message has to ask for
+`wp-nopnoe` explicitly, and everything here (text domain, zip folder, SVN path) assumes that
+request is granted. If the reviewer assigns something else, the text domain and the `SLUG`
+in the release workflow have to follow it.
+
+### After approval, tag and everything else is automated
+
+The plugin folder inside the zip must be named `wp-nopnoe`, after the slug:
 
 ```bash
-bin/build-zip.sh          # writes dist/nopnoe.zip
-unzip -l dist/nopnoe.zip  # confirm dev files are excluded
+bin/build-zip.sh             # writes dist/wp-nopnoe.zip
+unzip -l dist/wp-nopnoe.zip  # confirm dev files are excluded
 ```
 
-Then submit the zip through the WordPress.org plugin submission form. Once approved, releases
-are copied to `https://plugins.svn.wordpress.org/nopnoe` (`trunk/` plus `tags/<version>/`):
+To publish, add the WordPress.org credentials as repository secrets:
+
+| Secret | Value |
+| --- | --- |
+| `SVN_USERNAME` | your wordpress.org username |
+| `SVN_PASSWORD` | your wordpress.org password |
+
+Then bump the version in both `wp-nopnoe.php` and `readme.txt`, commit, and tag **without a
+`v` prefix**:
 
 ```bash
-svn co https://plugins.svn.wordpress.org/nopnoe svn-nopnoe
-rsync -a --delete --exclude-from=.distignore ./ svn-nopnoe/trunk/
-svn add --force svn-nopnoe/trunk
-svn cp svn-nopnoe/trunk svn-nopnoe/tags/1.0.0
-svn ci svn-nopnoe -m "Release 1.0.0"
+git tag 1.0.0
+git push origin 1.0.0
+```
+
+[release.yml](.github/workflows/release.yml) then checks that the tag, the plugin header and
+`Stable tag` all match, builds the zip, attaches it to a GitHub release, and pushes trunk plus
+`tags/<version>` to WordPress.org through
+[10up/action-wordpress-plugin-deploy](https://github.com/10up/action-wordpress-plugin-deploy).
+The tag name is the SVN tag name, which is why the `v` matters.
+
+Without the secrets the build and the GitHub release still run and the SVN step is skipped,
+so forks and first-time setups are safe. `workflow_dispatch` with *dry run* builds and
+validates without committing.
+
+### Manual fallback
+
+```bash
+svn co https://plugins.svn.wordpress.org/wp-nopnoe svn-wp-nopnoe
+rsync -a --delete --exclude-from=.distignore ./ svn-wp-nopnoe/trunk/
+svn add --force svn-wp-nopnoe/trunk
+svn cp svn-wp-nopnoe/trunk svn-wp-nopnoe/tags/1.0.0
+svn ci svn-wp-nopnoe -m "Release 1.0.0"
 ```
 
 Before submitting, check that the `Contributors:` line in [readme.txt](readme.txt) matches

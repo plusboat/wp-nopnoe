@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       No Panel No Edit
- * Plugin URI:        https://github.com/plusboat/nopnoe
+ * Plugin Name:       WP No panel - No edit
+ * Plugin URI:        https://github.com/plusboat/wp-nopnoe
  * Description:       When a user hides the admin toolbar, stop showing them edit links on the front end.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,7 +10,7 @@
  * Author URI:        https://plusbo.at
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       nopnoe
+ * Text Domain:       wp-nopnoe
  *
  * @package NopNoe
  */
