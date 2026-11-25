@@ -5,7 +5,6 @@
  * Description:       When a user hides the admin toolbar, stop showing them edit links on the front end.
  * Version:           1.0.0
  * Requires at least: 6.0
- * Tested up to:      7.1
  * Requires PHP:      7.4
  * Author:            Plusboat
  * Author URI:        https://plusbo.at
