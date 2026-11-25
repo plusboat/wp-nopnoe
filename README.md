@@ -88,6 +88,10 @@ a user with the toolbar hidden, come back for a user with it shown, non-display 
 keep their URLs, and logged-out visitors are untouched. The step exits non-zero when a check
 fails.
 
+The official Plugin Check plugin cannot run inside Playground: its PHPCS engine needs
+`php://stdin`, which PHP.wasm does not provide. Use `wp-env` or a local install if you want to
+run it before submitting.
+
 ## Release
 
 The plugin folder inside the zip must be named `nopnoe`, after the wordpress.org slug:
