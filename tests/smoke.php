@@ -90,6 +90,10 @@ $nopnoe_term_markup_off = $nopnoe_render(
 
 $nopnoe_check( null === get_edit_comment_link( $nopnoe_comment_id ), 'comment edit URL is blanked' );
 $nopnoe_check(
+	null === apply_filters( 'get_edit_comment_link', 'https://example.com/wp-admin/comment.php?c=1' ),
+	'comment edit URL is blanked for a pre-6.7 single-argument call'
+);
+$nopnoe_check(
 	false === strpos( $nopnoe_comment_markup_off, '<a' ) && false === strpos( $nopnoe_comment_markup_off, 'Edit' ),
 	'comment edit link markup is gone'
 );
@@ -118,6 +122,10 @@ $nopnoe_check(
 	'theme edit post link is back'
 );
 $nopnoe_check( null !== get_edit_comment_link( $nopnoe_comment_id ), 'comment edit URL is back' );
+$nopnoe_check(
+	'https://example.com/wp-admin/comment.php?c=1' === apply_filters( 'get_edit_comment_link', 'https://example.com/wp-admin/comment.php?c=1' ),
+	'pre-6.7 single-argument call passes the URL through when the toolbar is shown'
+);
 $nopnoe_check( null !== get_edit_term_link( $nopnoe_term_id, 'category' ), 'term edit URL is back' );
 $nopnoe_check(
 	false !== strpos(

@@ -1,6 +1,6 @@
 === WP No panel - No edit ===
 Contributors: yeahns
-Tags: admin bar, admin toolbar, edit links, toolbar, hide admin bar
+Tags: admin bar, toolbar, edit links
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -53,9 +53,8 @@ another plugin that hides the toolbar with the `show_admin_bar` filter.
   script that needs one still works.
 * **Logged-out visitors.** Nothing changes for them.
 
-The one thing no plugin can catch is a hard-coded link: if your theme prints
-`<a href="<?php echo admin_url( 'post.php?post=' . get_the_ID() . '&action=edit' ); ?>">` by
-hand, without going through a core helper, it will still be there.
+The one thing no plugin can catch is a hard-coded link: if your theme builds the edit URL by
+hand with `admin_url()` instead of going through a core helper, it will still be there.
 
 == Installation ==
 

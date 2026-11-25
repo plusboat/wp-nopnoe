@@ -80,12 +80,15 @@ final class Plugin {
 	/**
 	 * Blanks the comment edit URL used for display.
 	 *
+	 * WordPress only started passing `$comment_id` and `$context` to this filter in 6.7, so
+	 * the parameters need defaults; before that the context was always 'display'.
+	 *
 	 * @param string|null $link       Edit link URL.
 	 * @param int         $comment_id Comment ID.
 	 * @param string      $context    Link context.
 	 * @return string|null
 	 */
-	public static function hide_comment_edit_link( $link, $comment_id, $context ) {
+	public static function hide_comment_edit_link( $link, $comment_id = 0, $context = 'display' ) {
 		if ( 'display' !== $context || ! self::should_suppress() ) {
 			return $link;
 		}
