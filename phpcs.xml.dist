@@ -18,6 +18,13 @@
 
 	<rule ref="WordPress"/>
 
+	<!-- Plugin file names carry the plugin prefix, e.g. class-nopnoe-plugin.php. -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="strict_class_file_names" value="false"/>
+		</properties>
+	</rule>
+
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
