@@ -21,7 +21,15 @@ fi
 
 rm -rf dist
 mkdir -p "dist/${slug}"
-rsync -a --exclude-from=.distignore ./ "dist/${slug}/"
+
+# Copy only what ships. An ignore list is fragile: anything unlisted (a local WordPress
+# for Plugin Check, a stray artifact) would silently end up in the release zip.
+for item in "${slug}.php" readme.txt LICENSE includes; do
+	if [ -e "${item}" ]; then
+		cp -R "${item}" "dist/${slug}/"
+	fi
+done
+
 (cd dist && zip -qr "${slug}.zip" "${slug}")
 
 echo "Built dist/${slug}.zip (version ${version})"

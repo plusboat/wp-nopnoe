@@ -89,8 +89,28 @@ keep their URLs, and logged-out visitors are untouched. The step exits non-zero 
 fails.
 
 The official Plugin Check plugin cannot run inside Playground: its PHPCS engine needs
-`php://stdin`, which PHP.wasm does not provide. Use `wp-env` or a local install if you want to
-run it before submitting.
+`php://stdin`, which PHP.wasm does not provide. Run it natively instead, against a
+throwaway WordPress:
+
+```bash
+bin/plugin-check.sh          # build, install and run every check
+bin/plugin-check.sh --fresh  # rebuild the WordPress site and database first
+bin/plugin-check.sh --stop   # stop the database when you are done
+```
+
+Requirements: WP-CLI, PHP and MariaDB. Everything the script creates lives in
+`.plugincheck/` (git- and release-ignored) and is disposable. It starts its own database
+instance on port 33099 using a `mysql.pid` in its datadir, and refuses to run if that port
+belongs to some other server. Override the port with `NOPNOE_DB_PORT` and the PHP binary
+with `PHP_BIN`.
+
+It checks `dist/wp-nopnoe`, meaning exactly what ships, not the repository with its
+`vendor/` and `tests/`.
+
+Current result: **0 errors**, and three `trademarked_term` warnings for "wp" in the plugin
+name and slug. Plugin Check's own source marks that term `// it's allowed, but shows a
+warning.`, so it does not block approval, but it is the one finding reviewers may comment
+on. CI ignores that one code and enforces everything else.
 
 ## Release
 

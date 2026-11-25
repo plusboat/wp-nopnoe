@@ -43,3 +43,23 @@ jobs:
           npx --yes @wp-playground/cli@latest run-blueprint \
             --blueprint=tests/smoke-blueprint.json \
             --mount="$PWD:/wordpress/wp-content/plugins/wp-nopnoe"
+
+  plugin-check:
+    name: Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the plugin
+        run: |
+          chmod +x bin/build-zip.sh
+          bin/build-zip.sh
+
+      # trademarked_term is the only accepted finding: Plugin Check flags "wp" in the name
+      # and slug, but its own source marks that term as "allowed, but shows a warning".
+      # Everything else is enforced.
+      - uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: './dist/wp-nopnoe'
+          slug: 'wp-nopnoe'
+          ignore-codes: 'trademarked_term'
