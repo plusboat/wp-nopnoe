@@ -1,9 +1,9 @@
-# WP No panel - No edit (nopnoe)
+# No panel - No edit
 
 A two-hook WordPress plugin: when a user hides the admin toolbar, stop showing them edit
 links on the front end. No panel, no edit.
 
-* **Plugin slug:** `wp-nopnoe`
+* **Plugin slug:** `nopnoe`
 * **Requires:** WordPress 6.0+, PHP 7.4+
 * **User documentation:** [readme.txt](readme.txt)
 * **License:** GPL-2.0-or-later
@@ -67,7 +67,7 @@ npx @wp-playground/cli@latest start
 ```
 
 `start` detects the plugin in the current directory, mounts it at
-`wp-content/plugins/wp-nopnoe`, activates it and opens the site at http://127.0.0.1:9400.
+`wp-content/plugins/nopnoe`, activates it and opens the site at http://127.0.0.1:9400.
 Log in with `admin` / `password`, then use Users → Profile to toggle *Show Toolbar when
 viewing site* and watch the front end.
 
@@ -79,7 +79,7 @@ Useful flags: `--reset` (start from a clean site), `--wp=<version>`, `--php=<ver
 composer lint                                     # PHPCS, WordPress Coding Standards
 npx @wp-playground/cli@latest run-blueprint \
   --blueprint=tests/smoke-blueprint.json \
-  --mount="$PWD:/wordpress/wp-content/plugins/wp-nopnoe"
+  --mount="$PWD:/wordpress/wp-content/plugins/nopnoe"
 ```
 
 The blueprint boots a real WordPress, activates the plugin and runs
@@ -104,13 +104,13 @@ instance on port 33099 using a `mysql.pid` in its datadir, and refuses to run if
 belongs to some other server. Override the port with `NOPNOE_DB_PORT` and the PHP binary
 with `PHP_BIN`.
 
-It checks `dist/wp-nopnoe`, meaning exactly what ships, not the repository with its
+It checks `dist/nopnoe`, meaning exactly what ships, not the repository with its
 `vendor/` and `tests/`.
 
-Current result: **0 errors**, and three `trademarked_term` warnings for "wp" in the plugin
-name and slug. Plugin Check's own source marks that term `// it's allowed, but shows a
-warning.`, so it does not block approval, but it is the one finding reviewers may comment
-on. CI ignores that one code and enforces everything else.
+Current result: **0 errors, 0 warnings**. (Before the rename it showed three
+`trademarked_term` warnings, because Plugin Check flags "wp" in the plugin name and slug —
+its source marks that term `// it's allowed, but shows a warning.`, so it would have been
+allowed, but the name no longer contains it.)
 
 ## Release
 
@@ -121,20 +121,21 @@ WordPress.org has no API for the initial submission. You upload the zip at
 human volunteer reviews it; only after approval does the SVN repository, and with it any
 chance of automation, exist. Nothing in a workflow file can skip that queue.
 
-The slug in particular is assigned during review. The directory derives it from the plugin
-name (the FAQ example: `Boaty McBoatface` → `boaty-mcboatface`), which for "WP No panel - No
-edit" would produce `wp-no-panel-no-edit`. So the submission message has to ask for
-`wp-nopnoe` explicitly, and everything here (text domain, zip folder, SVN path) assumes that
-request is granted. If the reviewer assigns something else, the text domain and the `SLUG`
-in the release workflow have to follow it.
+The slug is assigned during review, derived from the plugin name (the FAQ example:
+`Boaty McBoatface` → `boaty-mcboatface`). "No panel - No edit" would therefore become
+`no-panel-no-edit`, not `nopnoe`. Everything here assumes `nopnoe` — text domain, zip folder,
+SVN path — so use the **change slug** link that appears on the submission page right after
+uploading, which can be used once before review begins. If that link is gone, email
+`plugins@wordpress.org`; they will change it as long as the plugin has not been approved.
+If a different slug is assigned anyway, the text domain and `SLUG` in the workflows follow it.
 
 ### After approval, tag and everything else is automated
 
-The plugin folder inside the zip must be named `wp-nopnoe`, after the slug:
+The plugin folder inside the zip must be named `nopnoe`: 
 
 ```bash
-bin/build-zip.sh             # writes dist/wp-nopnoe.zip
-unzip -l dist/wp-nopnoe.zip  # confirm dev files are excluded
+bin/build-zip.sh             # writes dist/nopnoe.zip
+unzip -l dist/nopnoe.zip  # confirm dev files are excluded
 ```
 
 To publish, add the WordPress.org credentials as repository secrets:
@@ -144,7 +145,7 @@ To publish, add the WordPress.org credentials as repository secrets:
 | `SVN_USERNAME` | your wordpress.org username |
 | `SVN_PASSWORD` | your wordpress.org password |
 
-Then bump the version in both `wp-nopnoe.php` and `readme.txt`, commit, and tag **without a
+Then bump the version in both `nopnoe.php` and `readme.txt`, commit, and tag **without a
 `v` prefix**:
 
 ```bash
@@ -165,11 +166,11 @@ validates without committing.
 ### Manual fallback
 
 ```bash
-svn co https://plugins.svn.wordpress.org/wp-nopnoe svn-wp-nopnoe
-rsync -a --delete --exclude-from=.distignore ./ svn-wp-nopnoe/trunk/
-svn add --force svn-wp-nopnoe/trunk
-svn cp svn-wp-nopnoe/trunk svn-wp-nopnoe/tags/1.0.0
-svn ci svn-wp-nopnoe -m "Release 1.0.0"
+svn co https://plugins.svn.wordpress.org/nopnoe svn-nopnoe
+rsync -a --delete --exclude-from=.distignore ./ svn-nopnoe/trunk/
+svn add --force svn-nopnoe/trunk
+svn cp svn-nopnoe/trunk svn-nopnoe/tags/1.0.0
+svn ci svn-nopnoe -m "Release 1.0.0"
 ```
 
 The `Contributors:` line in [readme.txt](readme.txt) must be your wordpress.org *username*,

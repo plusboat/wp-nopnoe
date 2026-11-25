@@ -1,4 +1,4 @@
-=== WP No panel - No edit ===
+=== No panel - No edit ===
 Contributors: yeahns
 Tags: admin bar, toolbar, edit links
 Requires at least: 6.0

@@ -5,7 +5,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-slug="wp-nopnoe"
+slug="nopnoe"
 version="$(sed -n 's/^ \* Version:[[:space:]]*//p' "${slug}.php" | head -1 | tr -d '\r')"
 stable_tag="$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')"
 

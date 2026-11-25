@@ -18,7 +18,7 @@ WORK="$ROOT/.plugincheck"
 SITE="$WORK/site"
 DATA="$WORK/db"
 PORT="${NOPNOE_DB_PORT:-33099}"
-SLUG="wp-nopnoe"
+SLUG="nopnoe"
 DB_NAME="nopnoe_check"
 PHP_BIN="${PHP_BIN:-php}"
 
