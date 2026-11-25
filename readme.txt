@@ -1,5 +1,5 @@
 === WP No panel - No edit ===
-Contributors: plusboat
+Contributors: yeahns
 Tags: admin bar, admin toolbar, edit links, toolbar, hide admin bar
 Requires at least: 6.0
 Tested up to: 7.1

@@ -152,8 +152,11 @@ svn cp svn-wp-nopnoe/trunk svn-wp-nopnoe/tags/1.0.0
 svn ci svn-wp-nopnoe -m "Release 1.0.0"
 ```
 
-Before submitting, check that the `Contributors:` line in [readme.txt](readme.txt) matches
-your wordpress.org username, otherwise the plugin page will not link to your profile.
+The `Contributors:` line in [readme.txt](readme.txt) must be your wordpress.org *username*,
+not your display name — a mismatched value silently produces no contributor on the plugin
+page. The username cannot be changed, but the name shown on the directory comes from your
+profile's display name, which you can edit at
+`https://profiles.wordpress.org/<username>/profile/edit/`.
 
 ## Credits
 
