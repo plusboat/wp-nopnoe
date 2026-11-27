@@ -1,135 +1,135 @@
 <?php
 /**
- * Smoke test for No Panel No Edit.
+ * Smoke test for Plusboat Editless.
  *
  * Runs inside a real WordPress, either as a Playground blueprint step or through
  * `wp eval-file`. Prints one line per check and throws when a check fails, so the run
  * fails loudly instead of passing quietly.
  *
- * @package NopNoE
+ * @package Plusboat_Editless
  */
 
-use NopNoe\Plugin;
+use Plusboat\Editless\Plugin;
 
-$nopnoe_failures = 0;
+$editless_failures = 0;
 
-$nopnoe_check = static function ( $condition, $message ) use ( &$nopnoe_failures ) {
+$editless_check = static function ( $condition, $message ) use ( &$editless_failures ) {
 	if ( $condition ) {
 		echo "PASS  {$message}\n";
 		return;
 	}
 
-	++$nopnoe_failures;
+	++$editless_failures;
 	echo "FAIL  {$message}\n";
 };
 
-$nopnoe_render = static function ( $callback ) {
+$editless_render = static function ( $callback ) {
 	ob_start();
 	$callback();
 	return ob_get_clean();
 };
 
-$nopnoe_user_id = 1;
-wp_set_current_user( $nopnoe_user_id );
+$editless_user_id = 1;
+wp_set_current_user( $editless_user_id );
 
-$nopnoe_post_id = wp_insert_post(
+$editless_post_id = wp_insert_post(
 	array(
-		'post_title'   => 'No Panel No Edit smoke test',
+		'post_title'   => 'Plusboat Editless smoke test',
 		'post_content' => 'Smoke test content.',
 		'post_status'  => 'publish',
-		'post_author'  => $nopnoe_user_id,
+		'post_author'  => $editless_user_id,
 	)
 );
 
-$nopnoe_comment_id = wp_insert_comment(
+$editless_comment_id = wp_insert_comment(
 	array(
-		'comment_post_ID'      => $nopnoe_post_id,
+		'comment_post_ID'      => $editless_post_id,
 		'comment_author'       => 'Smoke Tester',
 		'comment_author_email' => 'smoke@example.com',
 		'comment_content'      => 'A smoke test comment.',
 		'comment_approved'     => 1,
-		'user_id'              => $nopnoe_user_id,
+		'user_id'              => $editless_user_id,
 	)
 );
 
-$nopnoe_term    = wp_insert_term( 'No Panel No Edit smoke', 'category' );
-$nopnoe_term_id = is_array( $nopnoe_term ) ? $nopnoe_term['term_id'] : 0;
+$editless_term    = wp_insert_term( 'Plusboat Editless smoke', 'category' );
+$editless_term_id = is_array( $editless_term ) ? $editless_term['term_id'] : 0;
 
 // Toolbar hidden: the case this plugin exists for.
-update_user_meta( $nopnoe_user_id, 'show_admin_bar_front', 'false' );
+update_user_meta( $editless_user_id, 'show_admin_bar_front', 'false' );
 unset( $GLOBALS['show_admin_bar'] );
 
-$nopnoe_check( false === is_admin_bar_showing(), 'toolbar is hidden for the user' );
-$nopnoe_check( true === Plugin::should_suppress(), 'plugin suppresses edit links' );
-$nopnoe_check( null === get_edit_post_link( $nopnoe_post_id ), 'post edit URL is blanked' );
-$nopnoe_check(
-	'' === $nopnoe_render(
-		static function () use ( $nopnoe_post_id ) {
-			edit_post_link( 'Edit', '<span class="edit-link">', '</span>', $nopnoe_post_id );
+$editless_check( false === is_admin_bar_showing(), 'toolbar is hidden for the user' );
+$editless_check( true === Plugin::should_suppress(), 'plugin suppresses edit links' );
+$editless_check( null === get_edit_post_link( $editless_post_id ), 'post edit URL is blanked' );
+$editless_check(
+	'' === $editless_render(
+		static function () use ( $editless_post_id ) {
+			edit_post_link( 'Edit', '<span class="edit-link">', '</span>', $editless_post_id );
 		}
 	),
 	'theme edit post link is gone'
 );
-$nopnoe_check(
-	is_string( get_edit_post_link( $nopnoe_post_id, 'url' ) ) && '' !== get_edit_post_link( $nopnoe_post_id, 'url' ),
+$editless_check(
+	is_string( get_edit_post_link( $editless_post_id, 'url' ) ) && '' !== get_edit_post_link( $editless_post_id, 'url' ),
 	'non-display contexts keep their URL for notification emails'
 );
 
-$GLOBALS['comment'] = get_comment( $nopnoe_comment_id );
+$GLOBALS['comment'] = get_comment( $editless_comment_id );
 
-$nopnoe_comment_markup_off = $nopnoe_render(
+$editless_comment_markup_off = $editless_render(
 	static function () {
 		edit_comment_link( 'Edit', '<span class="edit-link">', '</span>' );
 	}
 );
-$nopnoe_term_markup_off = $nopnoe_render(
-	static function () use ( $nopnoe_term_id ) {
-		edit_term_link( 'Edit', '<span class="edit-link">', '</span>', $nopnoe_term_id );
+$editless_term_markup_off = $editless_render(
+	static function () use ( $editless_term_id ) {
+		edit_term_link( 'Edit', '<span class="edit-link">', '</span>', $editless_term_id );
 	}
 );
 
-$nopnoe_check( null === get_edit_comment_link( $nopnoe_comment_id ), 'comment edit URL is blanked' );
-$nopnoe_check(
+$editless_check( null === get_edit_comment_link( $editless_comment_id ), 'comment edit URL is blanked' );
+$editless_check(
 	null === apply_filters( 'get_edit_comment_link', 'https://example.com/wp-admin/comment.php?c=1' ),
 	'comment edit URL is blanked for a pre-6.7 single-argument call'
 );
-$nopnoe_check(
-	false === strpos( $nopnoe_comment_markup_off, '<a' ) && false === strpos( $nopnoe_comment_markup_off, 'Edit' ),
+$editless_check(
+	false === strpos( $editless_comment_markup_off, '<a' ) && false === strpos( $editless_comment_markup_off, 'Edit' ),
 	'comment edit link markup is gone'
 );
-$nopnoe_check( null === get_edit_term_link( $nopnoe_term_id, 'category' ), 'term edit URL is blanked' );
-$nopnoe_check(
-	false === strpos( $nopnoe_term_markup_off, '<a' ) && false === strpos( $nopnoe_term_markup_off, 'Edit' ),
+$editless_check( null === get_edit_term_link( $editless_term_id, 'category' ), 'term edit URL is blanked' );
+$editless_check(
+	false === strpos( $editless_term_markup_off, '<a' ) && false === strpos( $editless_term_markup_off, 'Edit' ),
 	'term edit link markup is gone'
 );
 
 // Toolbar shown: the plugin must stay out of the way.
-update_user_meta( $nopnoe_user_id, 'show_admin_bar_front', 'true' );
+update_user_meta( $editless_user_id, 'show_admin_bar_front', 'true' );
 unset( $GLOBALS['show_admin_bar'] );
 
-$nopnoe_check( true === is_admin_bar_showing(), 'toolbar is shown for the user' );
-$nopnoe_check( false === Plugin::should_suppress(), 'plugin stands down' );
-$nopnoe_check( null !== get_edit_post_link( $nopnoe_post_id ), 'post edit URL is back' );
-$nopnoe_check(
+$editless_check( true === is_admin_bar_showing(), 'toolbar is shown for the user' );
+$editless_check( false === Plugin::should_suppress(), 'plugin stands down' );
+$editless_check( null !== get_edit_post_link( $editless_post_id ), 'post edit URL is back' );
+$editless_check(
 	false !== strpos(
-		$nopnoe_render(
-			static function () use ( $nopnoe_post_id ) {
-				edit_post_link( 'Edit', '<span class="edit-link">', '</span>', $nopnoe_post_id );
+		$editless_render(
+			static function () use ( $editless_post_id ) {
+				edit_post_link( 'Edit', '<span class="edit-link">', '</span>', $editless_post_id );
 			}
 		),
 		'post-edit-link'
 	),
 	'theme edit post link is back'
 );
-$nopnoe_check( null !== get_edit_comment_link( $nopnoe_comment_id ), 'comment edit URL is back' );
-$nopnoe_check(
+$editless_check( null !== get_edit_comment_link( $editless_comment_id ), 'comment edit URL is back' );
+$editless_check(
 	'https://example.com/wp-admin/comment.php?c=1' === apply_filters( 'get_edit_comment_link', 'https://example.com/wp-admin/comment.php?c=1' ),
 	'pre-6.7 single-argument call passes the URL through when the toolbar is shown'
 );
-$nopnoe_check( null !== get_edit_term_link( $nopnoe_term_id, 'category' ), 'term edit URL is back' );
-$nopnoe_check(
+$editless_check( null !== get_edit_term_link( $editless_term_id, 'category' ), 'term edit URL is back' );
+$editless_check(
 	false !== strpos(
-		$nopnoe_render(
+		$editless_render(
 			static function () {
 				edit_comment_link( 'Edit', '<span class="edit-link">', '</span>' );
 			}
@@ -138,11 +138,11 @@ $nopnoe_check(
 	),
 	'comment edit link markup is back'
 );
-$nopnoe_check(
+$editless_check(
 	false !== strpos(
-		$nopnoe_render(
-			static function () use ( $nopnoe_term_id ) {
-				edit_term_link( 'Edit', '<span class="edit-link">', '</span>', $nopnoe_term_id );
+		$editless_render(
+			static function () use ( $editless_term_id ) {
+				edit_term_link( 'Edit', '<span class="edit-link">', '</span>', $editless_term_id );
 			}
 		),
 		'href'
@@ -154,10 +154,10 @@ $nopnoe_check(
 wp_set_current_user( 0 );
 unset( $GLOBALS['show_admin_bar'] );
 
-$nopnoe_check( false === Plugin::should_suppress(), 'logged-out visitors are left alone' );
+$editless_check( false === Plugin::should_suppress(), 'logged-out visitors are left alone' );
 
-if ( $nopnoe_failures > 0 ) {
-	throw new RuntimeException( sprintf( '%d smoke check(s) failed.', $nopnoe_failures ) );
+if ( $editless_failures > 0 ) {
+	throw new RuntimeException( sprintf( '%d smoke check(s) failed.', $editless_failures ) );
 }
 
 echo "All smoke checks passed.\n";

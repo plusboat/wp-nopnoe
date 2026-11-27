@@ -2,10 +2,10 @@
 /**
  * Front end edit link suppression.
  *
- * @package NopNoe
+ * @package Plusboat_Editless
  */
 
-namespace NopNoe;
+namespace Plusboat\Editless;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * The toolbar is the only edit affordance core prints on the front end by itself. Users who
  * turn it off in their profile are still handed the edit links that themes and plugins
- * render, which is why sites end up patching templates instead. No panel, no edit.
+ * render, which is why sites end up patching templates instead. No toolbar, no edit links.
  */
 final class Plugin {
 
@@ -58,7 +58,7 @@ final class Plugin {
 		 * @param bool $suppress Whether to hide edit links. Defaults to true when the current
 		 *                       user is not shown the admin toolbar.
 		 */
-		return (bool) apply_filters( 'nopnoe_suppress_edit_links', $suppress );
+		return (bool) apply_filters( 'plusboat_editless_suppress_edit_links', $suppress );
 	}
 
 	/**

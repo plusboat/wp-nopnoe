@@ -7,11 +7,11 @@
   "steps": [
     {
       "step": "activatePlugin",
-      "pluginPath": "nopnoe/nopnoe.php"
+      "pluginPath": "plusboat-editless/plusboat-editless.php"
     },
     {
       "step": "runPHP",
-      "code": "<?php require '/wordpress/wp-load.php'; require '/wordpress/wp-content/plugins/nopnoe/tests/smoke.php';"
+      "code": "<?php require '/wordpress/wp-load.php'; require '/wordpress/wp-content/plugins/plusboat-editless/tests/smoke.php';"
     }
   ]
 }

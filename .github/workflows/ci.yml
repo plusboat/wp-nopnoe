@@ -42,7 +42,7 @@ jobs:
         run: |
           npx --yes @wp-playground/cli@latest run-blueprint \
             --blueprint=tests/smoke-blueprint.json \
-            --mount="$PWD:/wordpress/wp-content/plugins/nopnoe"
+            --mount="$PWD:/wordpress/wp-content/plugins/plusboat-editless"
 
   plugin-check:
     name: Plugin Check
@@ -58,5 +58,5 @@ jobs:
       # Nothing is ignored: any finding, warning included, fails this job.
       - uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: './dist/nopnoe'
-          slug: 'nopnoe'
+          build-dir: './dist/plusboat-editless'
+          slug: 'plusboat-editless'

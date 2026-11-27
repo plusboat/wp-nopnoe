@@ -1,6 +1,6 @@
 {
-  "name": "plusboat/nopnoe",
-  "description": "No Panel No Edit - no toolbar, no edit links.",
+  "name": "plusboat/editless",
+  "description": "Plusboat Editless - hides front end edit links from users who hide the admin toolbar.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "require": {

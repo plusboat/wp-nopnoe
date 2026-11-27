@@ -26,15 +26,15 @@ jobs:
       - name: Check versions agree
         id: version
         run: |
-          header=$(sed -n 's/^ \* Version:[[:space:]]*//p' nopnoe.php | head -1 | tr -d '\r')
+          header=$(sed -n 's/^ \* Version:[[:space:]]*//p' plusboat-editless.php | head -1 | tr -d '\r')
           stable=$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')
 
           if [ -z "$header" ] || [ -z "$stable" ]; then
-            echo "Could not read the version from nopnoe.php or readme.txt." >&2
+            echo "Could not read the version from plusboat-editless.php or readme.txt." >&2
             exit 1
           fi
           if [ "$header" != "$stable" ]; then
-            echo "Version mismatch: nopnoe.php says $header, readme.txt says $stable." >&2
+            echo "Version mismatch: plusboat-editless.php says $header, readme.txt says $stable." >&2
             exit 1
           fi
           if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "$header" != "${GITHUB_REF_NAME}" ]; then
@@ -52,8 +52,8 @@ jobs:
       - name: Upload the zip
         uses: actions/upload-artifact@v4
         with:
-          name: nopnoe-${{ steps.version.outputs.version }}
-          path: dist/nopnoe.zip
+          name: plusboat-editless-${{ steps.version.outputs.version }}
+          path: dist/plusboat-editless.zip
           if-no-files-found: error
 
       - name: Create the GitHub release
@@ -61,7 +61,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ github.ref_name }}" dist/nopnoe.zip \
+          gh release create "${{ github.ref_name }}" dist/plusboat-editless.zip \
             --title "${{ github.ref_name }}" \
             --generate-notes
 
@@ -83,6 +83,6 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: nopnoe
+          SLUG: plusboat-editless
         with:
           dry-run: ${{ inputs.dry_run == true }}

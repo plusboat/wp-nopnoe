@@ -1,9 +1,9 @@
-# No panel - No edit
+# Plusboat Editless
 
 A two-hook WordPress plugin: when a user hides the admin toolbar, stop showing them edit
-links on the front end. No panel, no edit.
+links on the front end. No toolbar, no edit links.
 
-* **Plugin slug:** `nopnoe`
+* **Plugin slug:** `plusboat-editless`
 * **Requires:** WordPress 6.0+, PHP 7.4+
 * **User documentation:** [readme.txt](readme.txt)
 * **License:** GPL-2.0-or-later
@@ -26,8 +26,8 @@ is_user_logged_in() && ! is_admin() && ! wp_doing_ajax() && ! wp_is_json_request
 ```
 
 `is_admin_bar_showing()` already accounts for the user's profile preference and for the
-`show_admin_bar` filter, so "no panel" implies "no edit" without the plugin keeping state of
-its own.
+`show_admin_bar` filter, so a hidden toolbar implies hidden edit links without the plugin
+keeping state of its own.
 
 When that condition holds, these filters stand down:
 
@@ -52,8 +52,8 @@ Notes on the shape of it:
 The behaviour can be overridden with one filter:
 
 ```php
-add_filter( 'nopnoe_suppress_edit_links', '__return_true' );  // force on
-add_filter( 'nopnoe_suppress_edit_links', '__return_false' ); // turn off
+add_filter( 'plusboat_editless_suppress_edit_links', '__return_true' );  // force on
+add_filter( 'plusboat_editless_suppress_edit_links', '__return_false' ); // turn off
 ```
 
 ## Development
@@ -67,7 +67,7 @@ npx @wp-playground/cli@latest start
 ```
 
 `start` detects the plugin in the current directory, mounts it at
-`wp-content/plugins/nopnoe`, activates it and opens the site at http://127.0.0.1:9400.
+`wp-content/plugins/plusboat-editless`, activates it and opens the site at http://127.0.0.1:9400.
 Log in with `admin` / `password`, then use Users → Profile to toggle *Show Toolbar when
 viewing site* and watch the front end.
 
@@ -79,7 +79,7 @@ Useful flags: `--reset` (start from a clean site), `--wp=<version>`, `--php=<ver
 composer lint                                     # PHPCS, WordPress Coding Standards
 npx @wp-playground/cli@latest run-blueprint \
   --blueprint=tests/smoke-blueprint.json \
-  --mount="$PWD:/wordpress/wp-content/plugins/nopnoe"
+  --mount="$PWD:/wordpress/wp-content/plugins/plusboat-editless"
 ```
 
 The blueprint boots a real WordPress, activates the plugin and runs
@@ -101,16 +101,15 @@ bin/plugin-check.sh --stop   # stop the database when you are done
 Requirements: WP-CLI, PHP and MariaDB. Everything the script creates lives in
 `.plugincheck/` (git- and release-ignored) and is disposable. It starts its own database
 instance on port 33099 using a `mysql.pid` in its datadir, and refuses to run if that port
-belongs to some other server. Override the port with `NOPNOE_DB_PORT` and the PHP binary
-with `PHP_BIN`.
+belongs to some other server. Override the port with `PLUGIN_CHECK_DB_PORT` and the PHP
+binary with `PHP_BIN`.
 
-It checks `dist/nopnoe`, meaning exactly what ships, not the repository with its
+It checks `dist/plusboat-editless`, meaning exactly what ships, not the repository with its
 `vendor/` and `tests/`.
 
-Current result: **0 errors, 0 warnings**. (Before the rename it showed three
-`trademarked_term` warnings, because Plugin Check flags "wp" in the plugin name and slug —
-its source marks that term `// it's allowed, but shows a warning.`, so it would have been
-allowed, but the name no longer contains it.)
+Current result: **0 errors, 0 warnings**. (Earlier names carried "wp", which Plugin Check
+flags as `trademarked_term`; its source marks the term `// it's allowed, but shows a
+warning.`. The current name and slug do not use it.)
 
 ## Release
 
@@ -122,20 +121,21 @@ human volunteer reviews it; only after approval does the SVN repository, and wit
 chance of automation, exist. Nothing in a workflow file can skip that queue.
 
 The slug is assigned during review, derived from the plugin name (the FAQ example:
-`Boaty McBoatface` → `boaty-mcboatface`). "No panel - No edit" would therefore become
-`no-panel-no-edit`, not `nopnoe`. Everything here assumes `nopnoe` — text domain, zip folder,
-SVN path — so use the **change slug** link that appears on the submission page right after
-uploading, which can be used once before review begins. If that link is gone, email
-`plugins@wordpress.org`; they will change it as long as the plugin has not been approved.
-If a different slug is assigned anyway, the text domain and `SLUG` in the workflows follow it.
+`Boaty McBoatface` → `boaty-mcboatface`). "Plusboat Editless" derives to
+`plusboat-editless`, which is what everything here assumes — text domain, file names, zip
+folder, SVN path. The slug was requested explicitly in the reply to the first review, which
+also retired the earlier "No panel - No edit" / `nopnoe` identity. If a different slug is
+assigned anyway, the text domain, file names and `SLUG` in the workflows have to follow it;
+the submission page's one-time **change slug** link, or an email to `plugins@wordpress.org`
+while the plugin is unapproved, can correct it.
 
 ### After approval, tag and everything else is automated
 
-The plugin folder inside the zip must be named `nopnoe`: 
+The plugin folder inside the zip must be named `plusboat-editless`:
 
 ```bash
-bin/build-zip.sh             # writes dist/nopnoe.zip
-unzip -l dist/nopnoe.zip  # confirm dev files are excluded
+bin/build-zip.sh                          # writes dist/plusboat-editless.zip
+unzip -l dist/plusboat-editless.zip       # confirm dev files are excluded
 ```
 
 To publish, add the WordPress.org credentials as repository secrets:
@@ -145,8 +145,8 @@ To publish, add the WordPress.org credentials as repository secrets:
 | `SVN_USERNAME` | your wordpress.org username |
 | `SVN_PASSWORD` | your wordpress.org password |
 
-Then bump the version in both `nopnoe.php` and `readme.txt`, commit, and tag **without a
-`v` prefix**:
+Then bump the version in both `plusboat-editless.php` and `readme.txt`, commit, and tag
+**without a `v` prefix**:
 
 ```bash
 git tag 1.0.0
@@ -166,11 +166,11 @@ validates without committing.
 ### Manual fallback
 
 ```bash
-svn co https://plugins.svn.wordpress.org/nopnoe svn-nopnoe
-rsync -a --delete --exclude-from=.distignore ./ svn-nopnoe/trunk/
-svn add --force svn-nopnoe/trunk
-svn cp svn-nopnoe/trunk svn-nopnoe/tags/1.0.0
-svn ci svn-nopnoe -m "Release 1.0.0"
+svn co https://plugins.svn.wordpress.org/plusboat-editless svn-plusboat-editless
+rsync -a --delete --exclude-from=.distignore ./ svn-plusboat-editless/trunk/
+svn add --force svn-plusboat-editless/trunk
+svn cp svn-plusboat-editless/trunk svn-plusboat-editless/tags/1.0.0
+svn ci svn-plusboat-editless -m "Release 1.0.0"
 ```
 
 The `Contributors:` line in [readme.txt](readme.txt) must be your wordpress.org *username*,

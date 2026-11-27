@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 #
-# Builds dist/nopnoe.zip, the folder wordpress.org expects for the nopnoe slug.
+# Builds dist/plusboat-editless.zip, the folder wordpress.org expects for the
+# plusboat-editless slug.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-slug="nopnoe"
+slug="plusboat-editless"
 version="$(sed -n 's/^ \* Version:[[:space:]]*//p' "${slug}.php" | head -1 | tr -d '\r')"
 stable_tag="$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')"
 

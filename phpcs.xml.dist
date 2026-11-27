@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="No Panel No Edit">
-	<description>WordPress Coding Standards for the No Panel No Edit plugin.</description>
+<ruleset name="Plusboat Editless">
+	<description>WordPress Coding Standards for the Plusboat Editless plugin.</description>
 
 	<file>.</file>
 
@@ -19,7 +19,7 @@
 
 	<rule ref="WordPress"/>
 
-	<!-- Plugin file names carry the plugin prefix, e.g. class-nopnoe-plugin.php. -->
+	<!-- Plugin file names carry the plugin prefix, e.g. class-plusboat-editless-plugin.php. -->
 	<rule ref="WordPress.Files.FileName">
 		<properties>
 			<property name="strict_class_file_names" value="false"/>
@@ -29,7 +29,8 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="nopnoe"/>
+				<element value="plusboat"/>
+				<element value="plusboat_editless"/>
 			</property>
 		</properties>
 	</rule>
@@ -37,7 +38,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="nopnoe"/>
+				<element value="plusboat-editless"/>
 			</property>
 		</properties>
 	</rule>

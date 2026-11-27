@@ -17,9 +17,9 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORK="$ROOT/.plugincheck"
 SITE="$WORK/site"
 DATA="$WORK/db"
-PORT="${NOPNOE_DB_PORT:-33099}"
-SLUG="nopnoe"
-DB_NAME="nopnoe_check"
+PORT="${PLUGIN_CHECK_DB_PORT:-33099}"
+SLUG="plusboat-editless"
+DB_NAME="plugin_check"
 PHP_BIN="${PHP_BIN:-php}"
 
 MARIADBD="${MARIADBD:-$(command -v mariadbd || command -v mysqld || true)}"
@@ -73,7 +73,7 @@ mkdir -p "$WORK"
 
 if ! own_db_running; then
 	if db_ready; then
-		echo "Port $PORT is already used by another database. Set NOPNOE_DB_PORT to a free port." >&2
+		echo "Port $PORT is already used by another database. Set PLUGIN_CHECK_DB_PORT to a free port." >&2
 		exit 1
 	fi
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       No panel - No edit
- * Plugin URI:        https://github.com/plusboat/wp-nopnoe
+ * Plugin Name:       Plusboat Editless
+ * Plugin URI:        https://github.com/plusboat/plusboat-editless
  * Description:       When a user hides the admin toolbar, stop showing them edit links on the front end.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,15 +10,15 @@
  * Author URI:        https://plusbo.at
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       nopnoe
+ * Text Domain:       plusboat-editless
  *
- * @package NopNoe
+ * @package Plusboat_Editless
  */
 
-namespace NopNoe;
+namespace Plusboat\Editless;
 
 defined( 'ABSPATH' ) || exit;
 
-require_once __DIR__ . '/includes/class-nopnoe-plugin.php';
+require_once __DIR__ . '/includes/class-plusboat-editless-plugin.php';
 
 Plugin::boot();

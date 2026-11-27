@@ -1,4 +1,4 @@
-=== No panel - No edit ===
+=== Plusboat Editless ===
 Contributors: yeahns
 Tags: admin bar, toolbar, edit links
 Requires at least: 6.0
@@ -29,7 +29,7 @@ repeat the whole exercise after the next theme update. That is what this plugin 
 
 = How it decides =
 
-WP No panel - No edit does not have its own preference. It reads the one WordPress already has:
+Plusboat Editless does not have its own preference. It reads the one WordPress already has:
 if `is_admin_bar_showing()` is false for the current front end request, the edit links are
 hidden too. That means the plugin follows the user's profile setting, and it also respects
 another plugin that hides the toolbar with the `show_admin_bar` filter.
@@ -84,7 +84,7 @@ It applies to every logged-in user who has the toolbar hidden, administrators in
 
 Yes. The decision comes from one filter:
 
-`add_filter( 'nopnoe_suppress_edit_links', '__return_true' );`
+`add_filter( 'plusboat_editless_suppress_edit_links', '__return_true' );`
 
 Returning `false` from that filter turns the plugin off completely for the request.
 
